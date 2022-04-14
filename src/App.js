@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import { Route, Routes } from 'react-router';
 
-function App() {
+import { getBreweries } from './redux/actions/breweries';
+
+import { Container, AppBar, Typography } from '@material-ui/core';
+import SportsBarIcon from '@mui/icons-material/SportsBar';
+import useStyles from './styles';
+
+import BreweriesList from './components/BreweriesList/BreweriesList';
+import BreweryDetails from './components/BreweryDetails/BreweryDetails';
+
+const App = () => {
+  const classes = useStyles();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getBreweries());
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Container className={classes.container} maxwidth="lg">
+        <AppBar position="static" color="inherit" className={classes.appBar}>
+          <Typography variant="h3" align="center" className={classes.header}>
+            Breweries
+          </Typography>
+          <SportsBarIcon fontSize="large" className={classes.icon} />
+        </AppBar>
+        <Routes>
+          <Route path="/" element={<BreweriesList />} />
+          <Route path="/breweries/:id" element={<BreweryDetails />} />
+        </Routes>
+      </Container>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
